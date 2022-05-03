@@ -1,0 +1,6 @@
+#ifndef SUDOKU_SOLVER_CONSTANTS_H
+#define SUDOKU_SOLVER_CONSTANTS_H
+
+const int boardSize = 9;
+
+#endif //SUDOKU_SOLVER_CONSTANTS_H
