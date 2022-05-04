@@ -15,12 +15,14 @@ Solver::Solver() {
 }
 
 void Solver::printBoard() {
+    cout << endl;
     for (int x = 0; x < boardSize; x++) {
         for (int y = 0; y < boardSize; y++) {
             cout << board[x][y] << " ";
         }
         cout << endl;
     }
+    cout << endl;
 }
 
 bool Solver::readSudoku(string fileName) {
@@ -60,4 +62,58 @@ bool Solver::readSudoku(string fileName) {
         }
     }
     return true;
+}
+
+bool Solver::solveSudoku() {
+
+}
+
+bool Solver::getEmptyPlace(int &row, int &col) {
+    for (row = 0; row < boardSize; row++) {
+        for (col = 0; col < boardSize; col++) {
+            if (board[row][col] == 0) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool Solver::numIsInRow(int row, int num) {
+    for (int i = 0; i < boardSize; i++) {
+        if (board[row][i] == num) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Solver::numIsInCol(int col, int num) {
+    for (int i = 0; i < boardSize; i++) {
+        if (board[i][col] == num) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Solver::numIsInBox(int row, int col, int num) {
+    for (int i = 0; i < sqrt(boardSize); i++) {
+        for (int j = 0; j < sqrt(boardSize); j++) {
+            if (board[(row - (row % sqrt(boardSize))) + i][(col - (col % sqrt(boardSize))) + j] == num) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+int Solver::sqrt(int num) {
+    int toReturn = 0;
+    while (true) {
+        if (toReturn * toReturn == num) {
+            return toReturn;
+        }
+        toReturn++;
+    }
 }
