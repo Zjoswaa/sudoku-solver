@@ -15,4 +15,7 @@ bool isNumber(string s);
 // Converts s to an int and returns it
 int stringToInt(string s);
 
+// Sqrt of int
+int sqrt(int);
+
 #endif //SUDOKU_SOLVER_MAIN_H

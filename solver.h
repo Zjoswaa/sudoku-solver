@@ -27,7 +27,10 @@ private:
     // Checks if num is in box that contains (row, col)
     bool numIsInBox(int row, int col, int num);
 
-    // Returns sqrt of num (num has an int as sqrt, ex. 9, 16, 25 etc.)
+    // Checks if place is a valid place for num
+    bool validPlace(int row, int col, int num);
+
+    // Sqrt of int
     int sqrt(int num);
 
 public:
@@ -42,6 +45,9 @@ public:
     // False if any errors occur
     bool readSudoku(string fileName);
 
+    // Solves the sudoku
+    // Returns true if succeeded
+    // Else returns false
     bool solveSudoku();
 };
 

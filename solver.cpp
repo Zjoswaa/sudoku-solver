@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
+#include "constants.h"
 #include "main.h"
 #include "solver.h"
-#include "constants.h"
 
 using namespace std;
 
@@ -28,7 +28,6 @@ void Solver::printBoard() {
 bool Solver::readSudoku(string fileName) {
     ifstream inputFile(fileName);
     string input;
-    int charCounter = 0;
 
     // Check if file exists
     if (!inputFile.is_open()) {
@@ -38,23 +37,14 @@ bool Solver::readSudoku(string fileName) {
 
     for (int x = 0; x < boardSize; x++) {
         for (int y = 0; y < boardSize; y++) {
-            inputFile >> input;
-
-            // Check if too many characters in input file
-            charCounter++;
-            if (charCounter > boardSize * boardSize) {
-                cout << "Too many characters (max " << boardSize * boardSize << ") in " << fileName << endl;
-                return false;
-            }
-
-            // Check if too few characters in input file
-            if (inputFile.eof() && charCounter <= boardSize * boardSize) {
-                cout << "Too few characters (max " << boardSize * boardSize << ") in " << fileName << endl;
-                return false;
+            if (inputFile.eof()) {
+                input = "0";
+            } else {
+                inputFile >> input;
             }
 
             // Check if character in file is a number and 1 <=  character <= boardSize
-            if (!isNumber(input) || stringToInt(input) < 1 || stringToInt(input) > boardSize) {
+            if (!isNumber(input) || stringToInt(input) < 0 || stringToInt(input) > boardSize) {
                 cout << "Invalid char: \'" << input << "\' in " << fileName << endl;
                 return false;
             }
@@ -65,7 +55,24 @@ bool Solver::readSudoku(string fileName) {
 }
 
 bool Solver::solveSudoku() {
-
+    int row;
+    int col;
+    // When no empty places remain, sudoku is solved
+    if (!getEmptyPlace(row, col)) {
+        return true;
+    }
+    for (int i = 1; i <= boardSize; i++) {
+        if (validPlace(row, col, i)) {
+            board[row][col] = i;
+            // Check other places using recursion
+            if (solveSudoku()) {
+                return true;
+            }
+            // Else if this board results in unsolvable sudoku, make the spot 0
+            board[row][col] = 0;
+        }
+    }
+    return false;
 }
 
 bool Solver::getEmptyPlace(int &row, int &col) {
@@ -106,6 +113,10 @@ bool Solver::numIsInBox(int row, int col, int num) {
         }
     }
     return false;
+}
+
+bool Solver::validPlace(int row, int col, int num) {
+    return !numIsInRow(row, num) && !numIsInCol(col, num) && !numIsInBox(row, col, num);
 }
 
 int Solver::sqrt(int num) {

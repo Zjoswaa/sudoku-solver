@@ -1,11 +1,22 @@
 #include <iostream>
+#include "constants.h"
 #include "main.h"
 #include "solver.h"
 
 using namespace std;
 
 int main() {
+    // First test if a valid board size is set
+    try {
+        sqrt(boardSize);
+    } catch (invalid_argument &e) {
+        cout << e.what();
+        return 0;
+    }
+
     Solver s;
+    s.printBoard();
+
     int input = menu();
     string fileName;
 
@@ -19,7 +30,13 @@ int main() {
                 }
                 break;
             case 2:
-                // Solve sudoku
+                if (s.solveSudoku()) {
+                    cout << "Solved sudoku" << endl;
+                    s.printBoard();
+                    break;
+                }
+                cout << "Couldn't solve sudoku" << endl;
+                s.printBoard();
                 break;
         }
         input = menu();
@@ -62,3 +79,17 @@ int stringToInt(string s) {
     }
     return toReturn;
 }
+
+int sqrt(int num) {
+    int toReturn = 0;
+    while (true) {
+        if (toReturn * toReturn == num) {
+            return toReturn;
+        }
+        if (toReturn > num) {
+            throw invalid_argument("Invalid board size, needs to have a int square root (1, 2, 9, 16, 25 etc.)");
+        }
+        toReturn++;
+    }
+}
+
